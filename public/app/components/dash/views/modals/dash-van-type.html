@@ -11,8 +11,6 @@
             <div class="modal-body inv-no-border">
             <div class="panel-body inv-no-border">
 
-                            <p class="text-center inventory-text">Tell us how many small items, medium items or large items to be delivered. Every item for delivery must be accurately listed</p>
-
                 <br>
                         <form action="#" style="border-radius: 0px;" class="form-horizontal group-border-dashed">
 
@@ -20,8 +18,14 @@
                 <tbody>
 
                   <tr>
-                          <td width="50%"><strong>Small Item </strong>
-                                     <br><a href="javascript:;" data-html="true" data-toggle="popover" data-trigger="hover" data-content="
+                          <td width="50%"><strong>SWB Van </strong>
+                                        <br>
+                              
+                              <span class="pull-left">
+                                  <div class="col-md-12"><img src="assets/img/short-wheel-base-swb.png"></div>
+                       <br>
+                      </span>
+                        <a href="javascript:;" data-html="true" data-toggle="popover" data-trigger="hover" data-content="
                                         Max Length: 40cm
                                             <br>
                                         Max Width: 40cm
@@ -35,15 +39,15 @@
                                          " data-placement="right">See description</a>
                           </td>
                       <td width="50%">
-                        <div class="col-xs-12 col-sm-12 input-group">
-                        <!-- <input type="number" ng-change="changeData()" class="form-control" ng-model="dashInstant.itemBoxes[0].qty"> -->
-                        <!--<span ng-click="changeInventory('minus', 0); " class="input-group-addon plus-minus">-</span>-->
-                        <input id="small-item-input" class="form-control item-in" type="number" ng-model="dashInstant.itemBoxes[0].qty" ng-change="changeData()">
-                        <!--<span ng-click="changeInventory('plus', 0)" class="input-group-addon plus-minus">+</span>-->
+                        <div class=" text-center col-xs-12 col-sm-12 input-group">
+                        <input id="time-slot-1500-1700" ng-model="dashInstant.delType" type="radio" checked="" ng-change="changeData()" value="food" name="rad1" id="rad1">
                       </div></td>
                     </tr>
                       <tr>
-                          <td width="10%"><strong>Medium Item </strong>
+                          <td width="10%"><strong>LWB Van </strong>
+                                        <br>
+                              
+                              <div class="col-md-12"><img src="assets/img/long-wheel-base-lwb.png"></div>
                                         <br><a href="javascript:;" data-html="true" data-toggle="popover" data-trigger="hover" data-content="
                                         Max Length | 105cm
                                             <br>
@@ -56,14 +60,15 @@
                                         e.g chest of draws, dining table, Single bed." data-placement="right ">See description</a>
                           </td>
                       <td width="90%"><div class="col-xs-12 col-sm-12 input-group auto-marg">
-                        <!-- <input type="number" ng-change="changeData()" class="form-control" ng-model="dashInstant.itemBoxes[1].qty"> -->
-                        <!--<span ng-click="changeInventory('minus', 1)" class="input-group-addon plus-minus">-</span>-->
-                        <input id="medium-item-input" class="form-control item-in" type="number" ng-model="dashInstant.itemBoxes[1].qty" ng-change="changeData()">
-                        <!--<span ng-click="changeInventory('plus', 1)" class="input-group-addon plus-minus">+</span>-->
+                        <div class=" text-center col-xs-12 col-sm-12 input-group">
+                        <input  id="time-slot-1500-1700" ng-model="dashInstant.delType" type="radio" checked="" ng-change="changeData()" value="food" name="rad1" id="rad1">
+                      </div>
                       </div></td>
                     </tr>
                       <tr>
-                          <td width="10%"><strong>Larege Item</strong><br><a href="javascript:;" data-html="true" data-toggle="popover" data-trigger="hover" data-content="
+                          <td width="10%"><strong>Luton Van</strong><br>
+                              <div class="col-md-12">    <img src="assets/img/luton-van-jumbo.png"></div>
+                              <a href="javascript:;" data-html="true" data-toggle="popover" data-trigger="hover" data-content="
                                         Max Length | 200cm
                                             <br>
                                         Max Width | 140cm
@@ -76,50 +81,16 @@
                               " data-placement="right">See description</a>
                           </td>
                       <td width="90%"><div class=" col-xs-12 col-sm-12 input-group auto-marg">
-                        <!-- <input type="number" ng-change="changeData()" class="form-control" ng-model="dashInstant.itemBoxes[2].qty"> -->
-                        <!--<span ng-click="changeInventory('minus', 2)" class="input-group-addon plus-minus">-</span>-->
-                        <input id="large-item-input" class="form-control item-in" type="number" ng-model="dashInstant.itemBoxes[2].qty" ng-change="changeData()">
-                        <!--<span ng-click="changeInventory('plus', 2)" class="input-group-addon plus-minus">+</span>-->
-                      </div></a></td>
+                        <div class=" text-center col-xs-12 col-sm-12 input-group">
+                        <input  id="time-slot-1500-1700" ng-model="dashInstant.delType" type="radio" checked="" ng-change="changeData()" value="food" name="rad1" id="rad1">
+                      </div>
+                      </div></td>
                     </tr>
-                <tr>
-                          <td width="10%"><strong>Are any of your items Live animals?</strong><br><a href="javascript:;" data-html="true" data-toggle="popover" data-trigger="hover" data-content="
-                                        Max Length | 200cm
-                                            <br>
-                                        Max Width | 140cm
-                                            <br>
-                                        Max Height | 50cm
-                                            <br>
-                                        Max Weight | 60kg
-                                            <br>
-                                         e.g Double bed, White appliances, Double bed
-                              " data-placement="right">See description</a>
-                          </td>
-                      <td width="90%"><input id="time-slot-1500-1700" ng-model="dashInstant.delType" type="radio" checked="" ng-change="changeData()" value="animals" name="rad1" id="rad1"></td>
-                    </tr>
-                <tr>
-                          <td width="10%">
-                            <strong>Are any of your items hot food?</strong><br>
-                            <a href="javascript:;" data-html="true" data-toggle="popover" data-trigger="hover" data-content="
-                                        Max Length | 200cm
-                                            <br>
-                                        Max Width | 140cm
-                                            <br>
-                                        Max Height | 50cm
-                                            <br>
-                                        Max Weight | 60kg
-                                            <br>
-                                         e.g Double bed, White appliances, Double bed
-                              " data-placement="right">See description</a>
-                          </td>
-                      <td width="90%">
-                        <input id="time-slot-1500-1700" ng-model="dashInstant.delType" type="radio" checked="" ng-change="changeData()" value="food" name="rad1" id="rad1"></td>
-                    </tr>
-
-
-
+                
                   </tbody>
                 </table>
+                            
+                            
 
                            <div style="width: 100%; margin:10px 0 0 0;" class="growl growl-error growl-medium cubic-error hide">
                       <div class="growl-title">Cubic Volume Limit Has Been Reached!</div>
