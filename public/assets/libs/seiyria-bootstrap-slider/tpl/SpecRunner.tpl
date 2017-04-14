@@ -33,8 +33,9 @@
 
 	<!-- Slider used for PublicMethodsSpec and EventsSpec -->
 	<input id="testSlider1" type="text"/>
-
 	<input id="testSlider2" type="text"/>
+	<input id="testSlider3" type="text"/>
+	<input id="testSlider4" type="text"/>
 
 	<!-- Note: Two input elements with class 'makeSlider' are required for tests to run properly -->
   <input class="makeSlider" type="text"/>
@@ -103,11 +104,18 @@
 		<span id="accessibilitySliderLabelB">Label B</span>
 		<input id="accessibilitySliderA" type="text" data-slider-labelledby="accessibilitySliderLabelA" />
 		<input id="accessibilitySliderB" type="text" data-slider-labelledby='["accessibilitySliderLabelA", "accessibilitySliderLabelB"]' />
+
+		<input id="accessibilitySliderC" type="text" />
 	</div>
+  <!-- Sliders used for rtl -->
+	<div dir="rtl">
+		<input id="rtlSlider" type="text" />
+	</div>
+
 	<% with (scripts) { %>
-	  <% [].concat(jasmine, vendor, src, specs, reporters, start).forEach(function(script){ %>
-	  <script src="<%= script %>"></script>
-	  <% }) %>
+		<% [].concat(polyfills, jasmine, boot, vendor, helpers, src, specs,reporters).forEach(function(script){ %>
+		  <script src="<%= script %>"></script>
+		<% }) %>
 	<% }; %>
 </body>
 </html>

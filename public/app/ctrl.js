@@ -85,6 +85,16 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
         types: ['geocode']
     }
 
+    $scope.loadOptions = [
+        {id: 0, qty: 5, name: '5 mins'},
+        {id: 1, qty: 30, name: '30 mins'},
+        {id: 2, qty: 60, name: '1 hr'},
+        {id: 3, qty: 90, name: '1hr 30 mins'},
+        {id: 4, qty: 120, name: '2 hrs'},
+        {id: 5, qty: 150, name: '2hrs 30 mins'},
+        {id: 6, qty: 180, name: '3 hrs'}
+    ];
+
     if($localStorage.vg !== undefined && $localStorage.vg.jobDetails) {
         var timeNow = new Date().getTime();
         var saveTime = $localStorage.vg.jobDetails.timestamp;
@@ -114,10 +124,13 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
             {size: 'mdItems', qty: 0},
             {size: 'lgItems', qty: 0}
         ]
+
         $scope.dashInstant.extraDropObj = [];
         $scope.dashInstant.extraDropArr = [0];
         $scope.dashInstant.extraDropCount = 0;
         $scope.dashInstant.delChange = 0;
+        $scope.dashInstant.loadTime = $scope.loadOptions[0].qty;
+        $scope.dashInstant.unloadTime = $scope.loadOptions[0].qty;
     }
 
     //$scope.dashInstant.extraDrop = 0;
@@ -141,11 +154,14 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
       if($scope.dashInstant.extraDropCount !== 0) {
         $scope.dashInstant.extraDropCount--;
         $scope.dashInstant.extraDropArr.splice(no, 1);
+        $scope.dashInstant.extraDropObj.splice(no, 1);
         if($scope.dashInstant.extraDropCount > 0) {
           $scope.optimize = true;
         } else {
           $scope.optimize = false;
         }
+        $scope.changeData();
+        $scope.updateMaps();
       }
     }
 
@@ -260,6 +276,8 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
             }
         }
 
+        $scope.dropOffLen = Object.keys($scope.dashInstant.extraDropObj).length;
+
         $scope.dashInstant.jobStartTime = $scope.dashInstant.jobStartTimeHour+':'+$scope.dashInstant.jobStartTimeMin;
 
         if($scope.dashInstant.jobStartTime !== undefined || $scope.dashInstant.jobStartTime !== '') {
@@ -307,7 +325,7 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
 
 
         // IF THERES NO INVENTORY FLAG
-        if(isNaN($scope.dashInstant.itemBoxes[0].qty) == true) {
+        /*if(isNaN($scope.dashInstant.itemBoxes[0].qty) == true) {
           $scope.dashInstant.itemBoxes[0].qty = 0;
         }
         if(isNaN($scope.dashInstant.itemBoxes[1].qty) == true) {
@@ -321,6 +339,11 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
             canProgress = canProgress + 1;
             //console.log('itemBoxes');
 
+        }*/
+
+        if($scope.dashInstant.vanType == undefined || $scope.dashInstant.vanType == '') {
+          flag = flag + 1;
+          canProgress = canProgress + 1;
         }
 
         $scope.totalQty = (
@@ -538,8 +561,12 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
             $scope.calcAlgo();
 
             // IF THERES NO INVENTORY FLAG
-            if($scope.dashInstant.itemBoxes[0].qty < 1 && $scope.dashInstant.itemBoxes[1].qty < 1 && $scope.dashInstant.itemBoxes[2].qty < 1) {
+            /*if($scope.dashInstant.itemBoxes[0].qty < 1 && $scope.dashInstant.itemBoxes[1].qty < 1 && $scope.dashInstant.itemBoxes[2].qty < 1) {
                 $.growl.error({ message: 'Fill in the Inventory!' });
+            }*/
+
+            if($scope.dashInstant.vanType == undefined || $scope.dashInstant.vanType == '') {
+                $.growl.error({ message: 'Choose a van!' });
             }
 
 
@@ -657,18 +684,32 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
         }
     }
 
+    /*$scope.loadTimeCalc = function(min) {
+      $scope.dashInstant.loadTime = parseInt(min);
+    }
+
+    $scope.unloadTimeCalc = function(min) {
+      $scope.dashInstant.unloadTime = parseInt(min);
+    }*/
+
     $scope.calcAlgo = function() {
         $scope.loadTime = 0;
         $scope.unloadTime = 0;
         $scope.totalCuft = 0;
-        for(ti in $scope.dashInstant.itemBoxes) {
+        /*for(ti in $scope.dashInstant.itemBoxes) {
             var itemType = $scope.dashInstant.itemBoxes[ti].size;
             var itemQty = parseInt($scope.dashInstant.itemBoxes[ti].qty);
             var itemCuft = items[''+itemType+'']['cuFt'];
             $scope.loadTime = $scope.loadTime + (items[''+itemType+'']['loadTime'] * itemQty);
             $scope.unloadTime = $scope.unloadTime + (items[''+itemType+'']['unloadTime'] * itemQty);
             $scope.totalCuft = $scope.totalCuft + (itemCuft * itemQty);
-        }
+        }*/
+
+        $scope.loadTime = $scope.dashInstant.loadTime.qty;
+        $scope.unloadTime = $scope.dashInstant.unloadTime.qty;
+
+        if($scope.loadTime == 5) {$scope.loadTime = 0;}
+        if($scope.unloadTime == 5) {$scope.unloadTime = 0;}
 
 
         //dashInstant.itemBoxes = $scope.itemBoxes;
@@ -677,7 +718,7 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
         for(rat in rates) {
             var minRange = rates[rat].minRange;
             var maxRange = rates[rat].maxRange;
-            if($scope.totalCuft >= minRange && $scope.totalCuft <= maxRange) {
+            if($scope.dashInstant.vanType == rates[rat].nick) {
                 var rate = rates[rat].rate;
                 var van = rates[rat].van;
                 var jobMinCub = rates[rat].minRange;
@@ -690,10 +731,10 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
         $scope.dashInstant.jobMaxCub = jobMaxCub;
         $scope.dashInstant.vanDeets = vanDeets;
 
-        var driveTime = $scope.dashInstant.duration / 60;
+        var driveTime = parseInt($scope.dashInstant.duration) / 60;
         //var milesTravel = $scope.dashInstant.distance * 0.000621371192237;
         //console.log('distance: '+$scope.dashInstant.distance);
-        var fuelCost = $scope.dashInstant.distance * 1.5;
+        var fuelCost = parseInt($scope.dashInstant.distance) * 1.5;
 
         var totalTime = $scope.loadTime + $scope.unloadTime + driveTime;
         if(totalTime < 90) {
@@ -739,8 +780,45 @@ app.controller('DashInstantCtrl', function($scope, maps, $localStorage, items, r
     }
 
     $scope.updateMaps = function() {
+      $scope.tempDropObj = [];
       if($scope.dashInstant && $scope.dashInstant.address ) {
-        maps.setDirections($scope.dashInstant, $scope.optRoute, function(data) {
+        maps.setDirections($scope.dashInstant, $scope.optRoute, function(data, resp) {
+            $scope.respLen = Object.keys(resp.routes[0].legs).length-1;
+            //console.log('respLen: '+$scope.respLen);
+            for(key in resp.routes[0].legs) {
+              if($scope.respLen == key) {} else {
+                $scope.tempDropObj[key] = {postcode: resp.routes[0].legs[key].end_address, doorNumber: ''};
+              }
+            }
+
+            for(key in $scope.dashInstant.extraDropObj) {
+              for(k in $scope.tempDropObj) {
+                if($scope.dashInstant.extraDropObj[key].postcode.formatted_address == $scope.tempDropObj[k].postcode) {
+                  $scope.tempDropObj[k].doorNumber = $scope.dashInstant.extraDropObj[key].doorNumber;
+                  $scope.tempDropObj[k].postcode = $scope.dashInstant.extraDropObj[key].postcode;
+                  $scope.tempDropObj[k].lat = $scope.dashInstant.extraDropObj[key].lat;
+                  $scope.tempDropObj[k].lng = $scope.dashInstant.extraDropObj[key].lng;
+                }
+              }
+            }
+
+            for(key in $scope.dashInstant.extraDropObj) {
+              $scope.dashInstant.extraDropObj[key].doorNumber = $scope.tempDropObj[key].doorNumber;
+              $scope.dashInstant.extraDropObj[key].postcode = $scope.tempDropObj[key].postcode;
+              $scope.dashInstant.extraDropObj[key].lat = $scope.tempDropObj[key].lat;
+              $scope.dashInstant.extraDropObj[key].lng = $scope.tempDropObj[key].lng;
+            }
+
+            $scope.$apply();
+
+            if($scope.extraDropObj) {
+              if(Object.keys($scope.extraDropObj).length > 1) {
+                $scope.optimize = true;
+              }
+            }
+
+
+            console.log($scope.tempDropObj);
             var tempMiles = 0.000621371192237 * data.distance;
             $scope.dashInstant.fuelPrice = Math.round(tempMiles * 0.72);
             console.log('tempMiles: '+tempMiles);

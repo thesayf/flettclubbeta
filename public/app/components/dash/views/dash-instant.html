@@ -12,31 +12,28 @@
                                     <tr>
 
                                         <td>
-                                            
-                                            <button id="add-inventory-button" data-toggle="modal" data-target="#inv-fullWidth" type="button" class=" col-xs-12 btn btn-space    btn-success btn-rounded pull-right"><i class="icon icon-left s7-box2"></i> Choose Van <span ng-if="totalQty > 0" class="badge badge-primary" >{{totalQty}} Items</span></button>
+
+                                            <button id="add-inventory-button" data-toggle="modal" data-target="#inv-fullWidth" type="button" class=" col-xs-12 btn btn-space    btn-success btn-rounded pull-right"><i class="icon icon-left s7-box2"></i> Choose Van <span ng-if="dashInstant.vanType" class="badge badge-primary" >{{dashInstant.vanType}}</span></button>
                                         </td>
                                     </tr>
-                                    
+                                    <tr>
+                                        <td>
+                                            <button id="add-inventory-button" data-toggle="modal" data-target="#inv-fullWidth2" type="button" class=" col-xs-12 btn btn-space    btn-success btn-rounded pull-right"><i class="icon icon-left s7-box2"></i> Choose Loading Time <span ng-if="dashInstant.loadTime" class="badge badge-primary" >{{dashInstant.loadTime.qty + dashInstant.unloadTime.qty}} Mins</span></button>
+                                        </td>
+                                    </tr>
+
+
                                     <tr>
 
                                         <td>
-                                            
-                                            <button id="add-inventory-button" data-toggle="modal" data-target="#inv-fullWidth2" type="button" class=" col-xs-12 btn btn-space    btn-success btn-rounded pull-right"><i class="icon icon-left s7-box2"></i> Choose Loading Time <span ng-if="totalQty > 0" class="badge badge-primary" >{{totalQty}} Items</span></button>
-                                        </td>
-                                    </tr>
-            
-                                    
-                                    <tr>
-                                        
-                                        <td>
-                                            
-                                             <button id="add-collection-address" data-toggle="modal" data-target="#form-bp1" type="button" class=" col-xs-12 btn btn-space btn-success btn-rounded pull-right"><i class="icon icon-left s7-map-marker "></i> Add Pickup Address<span ng-if="dashInstant.address.start_location.name && dashInstant.address.start_location.number" class="badge badge-primary" >{{dashInstant.address.start_location.name.formatted_address | limitTo: 7 }}...</span></button>
+
+                                             <button id="add-collection-address" data-toggle="modal" data-target="#form-bp1" type="button" class=" col-xs-12 btn btn-space btn-success btn-rounded pull-right"><i class="icon icon-left s7-map-marker "></i> Add Pickup Address <span ng-if="dashInstant.address.start_location.name && dashInstant.address.start_location.number" class="badge badge-primary" > {{dashInstant.address.start_location.name.formatted_address | limitTo: 7 }}...</span></button>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            
-                                             <button id="add-collection-address" data-toggle="modal" data-target="#form-bp4" type="button" class=" col-xs-12 btn btn-space btn-success btn-rounded pull-right"><i class="icon icon-left s7-map-marker "></i> Add Dropoffs<span ng-if="dashInstant.address.start_location.name && dashInstant.address.start_location.number" class="badge badge-primary" >{{dashInstant.address.start_location.name.formatted_address | limitTo: 7 }}...</span></button>
+
+                                             <button id="add-collection-address" data-toggle="modal" data-target="#form-bp4" type="button" class=" col-xs-12 btn btn-space btn-success btn-rounded pull-right"><i class="icon icon-left s7-map-marker "></i> Add Dropoffs <span ng-if="dropOffLen > 0" class="badge badge-primary" >{{dropOffLen}} Dropoffs</span></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -109,7 +106,7 @@
               <div class="modal-body form inv-no-border">
                  <div class="panel-body inv-no-border">
                  <div class="col-md-12">
-                     
+
                      <div class="btn-group btn-hspace">
                       <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Up to 30 minutes<span class="caret"></span></button>
                       <ul role="menu" class="dropdown-menu">
@@ -120,13 +117,13 @@
                           <li><a href="#">3 hrs</a></li>
                       </ul>
                     </div>
-                     
+
                      <button ng-change="changeData()" type="text" ng-model="dashInstant.jobStartTimeMin" class=" col-md-4 time-input-min btn btn-default dropdown-toggle" data-time-format="i"  >up to 30 minutes<span class="caret"></span></button>
 
 
                     <tr ng-if="nowTime > 18"><td>No more time slots available today please choose another date.</td></tr>
                     <tr ng-if="!dashInstant.jobDate"><td>Please choose a job starting date.</td></tr>
-                 
+
                          </div>
 <div class="clearfix"></div>
             </div>
@@ -162,9 +159,10 @@
                 <div class="clearfix"></div>
                   <h2>Choose Time </h2>
                   <br>
-                  <button ng-change="changeData()" type="text" ng-model="dashInstant.jobStartTimeHour" class=" col-md-4 time-input-hour btn btn-default dropdown-toggle" data-time-format="H" >Choose hour<span class="caret"></span></button>
-                     
-                     <button ng-change="changeData()" type="text" ng-model="dashInstant.jobStartTimeMin" class=" col-md-4 time-input-min btn btn-default dropdown-toggle" data-time-format="i" >Choose minute <span class="caret"></span></button>
+                  <tr>
+                    <td><input ng-change="changeData()" type="text" ng-model="dashInstant.jobStartTimeHour" class="time-input-hour" data-time-format="H" /></td>  </tr>
+                  <tr>  <td><input ng-change="changeData()" type="text" ng-model="dashInstant.jobStartTimeMin" class="time-input-min" data-time-format="i" /></td></tr>
+
             </div>
             </div>
             <div class="modal-footer">
@@ -192,31 +190,21 @@
                     <hr>
 
                 <table class="table table-striped table-fw-widget">
-                <tbody>
-
-
-                    <tr ng-repeat="ext in dashInstant.extraDropArr" >
-                        <td width="10%"><span class="badge badge-primary">1</span></td>
-                        <td width="80%"><input id="delivery-postcode-input" class="form-control" force-selection="true" placeholder="Postcode" g-places-autocomplete options="autocompleteOptions" ng-model="dashInstant.address.start_location.name" ng-change="updateMaps(); changeData()" ng-model-options='{debounce: 100}' /></td>
-                        <td width="10%"><span class="badge badge-primary"></span></td>
-                        
+                <tbody ng-repeat="ext in dashInstant.extraDropArr">
+                    <tr>
+                        <td width="10%"><span class="badge badge-primary">{{$index+1}}</span></td>
+                        <td width="80%">
+                          <input id="delivery-postcode-input" class="form-control" force-selection="true" placeholder="Postcode" g-places-autocomplete options="autocompleteOptions" ng-model="dashInstant.extraDropObj[$index].postcode" ng-change="updateMaps(); changeData()" ng-model-options='{debounce: 100}' />
+                        </td>
+                        <td width="10%"><span style="cursor:pointer;" ng-click="deleteDropRow($index)" ng-if="$index > 0" class="badge badge-primary">X</span></td>
                     </tr>
-                    <tr ng-repeat="ext in dashInstant.extraDropArr" >
-                        <td width="10%"></td>
-                        <td width="80%"><input id="delivery-postcode-input" class="form-control" force-selection="true" placeholder="House Number" g-places-autocomplete options="autocompleteOptions" ng-model="dashInstant.address.start_location.name" ng-change="updateMaps(); changeData()" ng-model-options='{debounce: 100}' /></td>
-                        <td width="10%"><span class="badge badge-primary"></span></td>
-                    </tr>
-                    <tr ng-repeat="ext in dashInstant.extraDropArr" >
-                        <td width="10%"><span class="badge badge-primary">2</span></td>
-                        <td width="80%"><input id="delivery-postcode-input" class="form-control" force-selection="true" placeholder="Postcode" g-places-autocomplete options="autocompleteOptions" ng-model="dashInstant.address.start_location.name" ng-change="updateMaps(); changeData()" ng-model-options='{debounce: 100}' /></td>
-                        <td width="10%"><span class="badge badge-primary">X</span></td>
-                    </tr>
-                    <tr ng-repeat="ext in dashInstant.extraDropArr" >
-                        <td width="10%"></td>
-                        <td width="80%"><input id="delivery-postcode-input" class="form-control" force-selection="true" placeholder="House Number" g-places-autocomplete options="autocompleteOptions" ng-model="dashInstant.address.start_location.name" ng-change="updateMaps(); changeData()" ng-model-options='{debounce: 100}' /></td>
+                    <tr>
+                        <td width="10%"><span class="badge badge-primary">{{$index+1}}</span></td>
+                        <td width="80%">
+                          <input id="delivery-postcode-input" class="form-control" placeholder="Door Number"  ng-model="dashInstant.extraDropObj[$index].doorNumber" ng-change="changeData()" ng-model-options='{debounce: 100}' />
+                        </td>
                         <td width="10%"><span class="badge badge-primary"></span></td>
                     </tr>
-
                   </tbody>
                 </table>
 
@@ -266,15 +254,8 @@
                           <div class=" col-xs-12 col-sm-12 input-group auto-marg">
                         <div class=" text-center col-xs-12 col-sm-12 input-group">
                        <div class="btn-group btn-hspace">
-                      <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">5 minutes<span class="caret"></span></button>
-                      <ul role="menu" class="dropdown-menu">
-                          <li><a href="#">30 mins</a></li>
-                        <li><a href="#">1 hr</a></li>
-                        <li><a href="#">1hr 30 mins</a></li>
-                        <li><a href="#">2 hrs</a></li>
-                          <li><a href="#">2hr and 30 mins</a></li>
-                          <li><a href="#">3 hrs</a></li>
-                      </ul>
+                         <select ng-change="changeData()" ng-options="option.name for option in loadOptions track by option.qty" name="singleSelect" id="singleSelect" ng-model="dashInstant.loadTime">
+                         </select>
                     </div>
                       </div>
                       </div></td>
@@ -298,22 +279,15 @@
                         <div class=" col-xs-12 col-sm-12 input-group auto-marg">
                         <div class=" text-center col-xs-12 col-sm-12 input-group">
                         <div class="btn-group btn-hspace">
-                      <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">5 minutes<span class="caret"></span></button>
-                      <ul role="menu" class="dropdown-menu">
-                          <li><a href="#">30 mins</a></li>
-                        <li><a href="#">1 hr</a></li>
-                        <li><a href="#">1hr 30 mins</a></li>
-                        <li><a href="#">2 hrs</a></li>
-                          <li><a href="#">2hr and 30 mins</a></li>
-                          <li><a href="#">3 hrs</a></li>
-                      </ul>
+                      <select ng-change="changeData()" ng-options="option.name for option in loadOptions track by option.qty" name="singleSelect" id="singleSelect" ng-model="dashInstant.unloadTime">
+                      </select>
                     </div>
                       </div>
                       </div></td>
                     </tr>
                   </tbody>
                 </table>
-                            
+
             </div>
             </div>
             <div class="modal-footer">
@@ -323,4 +297,3 @@
         </div>
     </div>
 </div>
-

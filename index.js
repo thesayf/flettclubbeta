@@ -17,7 +17,6 @@ var path                    = require('path');
 var jwt                     = require('jsonwebtoken');
 var sgHelper = require('sendgrid').mail;
 var sg = require('sendgrid')('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');
-var env                     = require('node-env-file');
 var nodemailer              = require('nodemailer');
 
 
@@ -68,8 +67,6 @@ cont.member = member;
 cont.gs = gs;
 cont.swift = swift;
 
-env(__dirname + '/.env');
-
 var info = {};
 info.gsAPI = process.env.GSAPI;
 
@@ -80,12 +77,6 @@ info.gsAPI = process.env.GSAPI;
 // Set Port ====================================================================
 app.set('port', (process.env.PORT || 5004));
 
-// Passport
-app.use(session({secret: 'this is the secret'}));
-app.use(cookieParser('this is the secret'));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(flash());
 
 // Need to make sure that the ngfile upload was bing used so just writw this code
 app.use('/node_modules', express.static(__dirname + "/node_modules"));

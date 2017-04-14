@@ -214,6 +214,7 @@ app.factory('rates', function() {
             maxRange: 200,
             rate: .25,
             van: 'Small Van',
+            nick: 'SWB Van',
             details: 'Short Wheel Base - 350 ft3, Length: 3.4m, Width: 1.7m, Height: 1.7m, Payload: 1200-1500kg'
         },
         1: {
@@ -221,6 +222,7 @@ app.factory('rates', function() {
             maxRange: 350,
             rate: .34,
             van: 'Medium Van',
+            nick: 'LWB Van',
             details: 'Long Wheel Base - 600 ft3, Length: 4m, Width: 2m, Height: 2.2m, Payload: 1200-1500kg'
         },
         2: {
@@ -228,6 +230,7 @@ app.factory('rates', function() {
             maxRange: 600,
             rate: .59,
             van: 'Luton Van',
+            nick: 'Luton Van',
             details: 'Luton Van - 600 ft3, Length: 4m, Width: 2m, Height: 2.2m, Payload: 1200-1500kg'
         }
     };
@@ -518,11 +521,12 @@ app.service('maps', function($timeout, $window, routeInfo) {
         directionsService.route(request, function (response, status) {
             if (status === google.maps.DirectionsStatus.OK) {
                 directionsDisplay.setDirections(response);
+                console.log(response);
                 //dashInstant.distance = response.routes[0].legs[0].distance.value;
                 //dashInstant.duration = response.routes[0].legs[0].duration.value;
             }
             google.maps.event.trigger(map, 'resize');
-            callback(dashInstant);
+            callback(dashInstant, response);
         });
 
 
