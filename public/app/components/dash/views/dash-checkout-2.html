@@ -28,7 +28,12 @@
                       <td class="number"> {{dashInstant.address.start_location.number}}, {{dashInstant.address.start_location.name.formatted_address}}  </td>
                     </tr>
                     <tr>
-                        <td><strong style="font-family:'roboto' !important;">Delivery</strong></td>
+                        <td><strong style="font-family:'roboto' !important;">Delivery 1</strong></td>
+                      <td  class="number">
+                        <p ng-repeat="ext in dashInstant.extraDropObj">{{ext.doorNumber}}, {{ext.postcode.formatted_address}}</p>
+                    </tr>
+                    <tr>
+                        <td><strong style="font-family:'roboto' !important;">Delivery 2</strong></td>
                       <td  class="number">
                         <p ng-repeat="ext in dashInstant.extraDropObj">{{ext.doorNumber}}, {{ext.postcode.formatted_address}}</p>
                     </tr>
@@ -37,10 +42,12 @@
                       <td class="number">Delivery on the {{dashInstant.jobDate}} between {{dashInstant.jobStartTime}}</td>
                     </tr>
                       <tr>
-                          <td><strong style="font-family:'roboto' !important;">Delivery Items</strong></td>
-                      <td class="number"> Small items x {{dashInstant.itemBoxes[0].qty}},
-                          Medium items x {{dashInstant.itemBoxes[1].qty}}
-                          Large items x {{dashInstant.itemBoxes[2].qty}}</td>
+                          <td><strong style="font-family:'roboto' !important;">Van Booked</strong></td>
+                      <td class="number"></td>
+                    </tr>
+                      <tr>
+                          <td><strong style="font-family:'roboto' !important;">Loading time Booked</strong></td>
+                      <td class="number"> </td>
                     </tr>
                       <tr>
                           <td><strong style="font-family:'roboto' !important;">Extra Helper</strong></td>
@@ -57,7 +64,7 @@
                            This price is for a ground floor to ground floor service. You will be charged an extra £5 per man per floor if you require loading from another floor. Any property that has an adequately functioning lift will not incur this charge.
 
 
-                            </ul>
+                        
 
                           </td>
                     </tr>
